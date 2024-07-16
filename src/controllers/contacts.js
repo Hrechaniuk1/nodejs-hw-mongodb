@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 
-import { getAllContacts, getContactById, addContact, deleteContact } from './services/contacts.js';
+import { getAllContacts, getContactById, addContact, deleteContact, putchContact } from '../services/contacts.js';
 
 export async function getAllContactsController(req, res) {
         const contacts = await getAllContacts();
@@ -41,4 +41,18 @@ export async function deleteContactController(req, res) {
         throw createHttpError(404, "Contact not found");
     }
     res.sendStatus(204);
-}
+};
+
+export async function putchContactController(req, res) {
+    const {contactId} = req.params;
+    const updatedContact = await putchContact(contactId, req.body);
+    if(!updatedContact) {
+        throw createHttpError(404, "Contact not found");
+    }
+    res.status(200).json({
+        status: 200,
+        message: 'Successfully patched a contact!',
+        data: updatedContact.contact,
+    });
+
+};
