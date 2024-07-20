@@ -6,8 +6,8 @@ export const validateBody = (schema) => async (req, res, next) => {
             abortEarly: false,
         });
         next();
-    } catch {
-        const error = createHttpError(400, 'Invalid data', {errors: error.details});
+    } catch (err) {
+        const error = createHttpError(400, 'Invalid data', {errors: err.details});
         next(error);
     };
 };

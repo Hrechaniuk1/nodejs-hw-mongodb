@@ -1,13 +1,13 @@
 import Joi from 'joi';
 
 export const contactSchema = Joi.object({
-    name: Joi.string().min(3).max(20).required().message({
+    name: Joi.string().min(3).max(20).required().messages({
         'any.required': ('Name is required'),
     }),
-    phoneNumber: Joi.string().min(3).max(20).required().message({
+    phoneNumber: Joi.string().min(3).max(20).required().messages({
         'any.required' : 'Phone number is required',
     }),
-    email: Joi.string().email().message({
+    email: Joi.string().email().messages({
         'string.email' : 'Should be a valid email address',
     }),
     isFavourite: Joi.boolean(),
