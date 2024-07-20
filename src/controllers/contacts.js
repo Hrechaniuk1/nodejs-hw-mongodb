@@ -2,10 +2,12 @@ import createHttpError from 'http-errors';
 
 import { getAllContacts, getContactById, addContact, deleteContact, putchContact } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parsedSortParapms } from '../utils/parseSortParams.js';
 
 export async function getAllContactsController(req, res) {
         const {page, perPage} = parsePaginationParams(req.query);
-        const contacts = await getAllContacts({page, perPage});
+        const {sortBy, sortOrder} = parsedSortParapms(req.query);
+        const contacts = await getAllContacts({page, perPage, sortBy, sortOrder});
         res.status(200).json({
           status: 200,
           message: "Successfully found contacts!",
