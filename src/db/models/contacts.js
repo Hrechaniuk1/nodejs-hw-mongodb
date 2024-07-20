@@ -5,9 +5,13 @@ const contactSchema = new Schema ({
     name: {
         type: String,
         required: true,
+        minlength: 3,
+        maxlength: 20,
       },
       phoneNumber:  {
         type: String,
+        minlength: 3,
+        maxlength: 20,
         required: true,
       },
       email: {
@@ -22,6 +26,8 @@ const contactSchema = new Schema ({
       contactType: {
         type: String,
         enum: ['work', 'home', 'personal'],
+        minlength: 3,
+        maxlength: 20,
         required: true,
         default: 'personal',
       },
