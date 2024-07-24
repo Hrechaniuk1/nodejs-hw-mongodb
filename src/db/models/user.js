@@ -14,12 +14,19 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-
+        minLength: 7,
+        maxLength: 15,
     }
 },
 {
     timestamps: true,
     versionKey: false,
 });
+
+userSchema.method.toJSON = function() {
+    const obj = this.toObject();
+    delete obj.password;
+    return obj;
+};
 
 export const usersCollection = model('users', userSchema);
