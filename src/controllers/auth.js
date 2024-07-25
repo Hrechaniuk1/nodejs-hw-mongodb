@@ -6,7 +6,7 @@ function setupSession (res, session) {
         httpOnly: true,
         expires: new Date(Date.now() + THIRTY_DAYS),
     });
-    res.cookie('sessionId', session.userId, {
+    res.cookie('sessionId', session.session._id, {
         httpOnly: true,
         expires: new Date(Date.now() + THIRTY_DAYS),
     });
