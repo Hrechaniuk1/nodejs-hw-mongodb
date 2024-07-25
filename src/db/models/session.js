@@ -21,6 +21,9 @@ const sessionSchema = new Schema({
         type: Date,
         required: true,
     }
+},{
+    timestamps: true,
+    versionKey: false,
 });
 
 export const sessionCollection = model('sessions', sessionSchema);

@@ -2,15 +2,16 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
 
-import { usersCollection } from "../db/models/user";
+import { usersCollection } from "../db/models/user.js";
 import {FIFTEEN_MINUTES, THIRTY_DAYS}  from '../constants/authConstants.js';
 import {sessionCollection} from '../db/models/session.js';
 
-async function createSession() {
+async function createSession(userId) {
     const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
   return await sessionCollection.create({
+    userId,
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
@@ -33,30 +34,27 @@ export const loginUser = async (data) => {
     if(!ifPasswordsEqual) throw createHttpError(401, 'Unauthorized');
 
     await sessionCollection.deleteOne({userId: user._id});
-    const newSession = createSession();
-
-    return {
-        userId: user._id,
-        ...newSession,
-    };
+    const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+  return await sessionCollection.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
+  });
 
 };
 
-export const refreshUser = async ({sessionId, refreshToken}) => {
-    const session = sessionCollection.findOne({_id: sessionId, refreshToken});
+export const refreshUser = async (sessionId, refreshToken) => {
+    const session = await sessionCollection.findOne({_id: sessionId, refreshToken});
     if(!session) throw createHttpError(401, 'Session not found');
 
     const isExpired = new Date() > new Date(session.refreshTokenValidUntil);
-    if(!isExpired) throw createHttpError(401, 'Session token expired');
-
-    const newSession = createSession();
-
+    if(isExpired) throw createHttpError(401, 'Session token expired');
     await sessionCollection.deleteOne({_id: sessionId, refreshToken});
-
-    return {
-        userId: session.userId(),
-        ...newSession,
-    };
+    const newSession = createSession(session.userId);
+    return newSession;
 
 };
 
