@@ -22,5 +22,5 @@ export const contactSchemaPutch = Joi.object({
     }),
     isFavourite: Joi.boolean(),
     contactType: Joi.string().min(3).max(20),
-    userId: Joi.string().required(),
+    userId: Joi.string(),
 });
