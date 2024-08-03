@@ -4,6 +4,7 @@ dotenv.config();
 
 export function env(name, defaultName) {
     const value = process.env[name];
+    console.log(value, name);
     if(value) return value;
     if(defaultName) return defaultName;
     throw new Error('Oops');
