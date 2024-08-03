@@ -80,8 +80,12 @@ export const resetPassword = async (email) => {
   },
 );
 
-const resetUrl = `https://${env('APP_DOMAIN')}/reset-password?token=
+const domain = env('APP_DOMAIN');
+
+const resetUrl = `https://${domain}/reset-password?token=
 ${resetToken}`;
+
+console.log(resetUrl);
 
 try {
   await sendMail({
@@ -93,4 +97,33 @@ try {
 } catch {
   throw createHttpError("Failed to send the email, please try again later.");
 };
+};
+
+export const doResetPassword = async (data) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(data.token, env('JWT_SECRET'));
+  } catch (err) {
+    if(err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  };
+
+  const user = await usersCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if(!user) {
+    throw createHttpError(404, 'User not found');
+  };
+
+  const session = await sessionCollection.findOne({userId: user._id});
+  if(session) await sessionCollection.deleteOne({userId: user._id});
+
+  const encruptedPassword = await bcrypt.hash(data.password, 10);
+
+  await usersCollection.updateOne({
+    _id: user._id},
+    {password: encruptedPassword});
 };
