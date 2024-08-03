@@ -80,12 +80,8 @@ export const resetPassword = async (email) => {
   },
 );
 
-const domain = env('APP_DOMAIN');
-
-const resetUrl = `https://${domain}/reset-password?token=
+const resetUrl = `https://${env('APP_DOMAIN')}/reset-password?token=
 ${resetToken}`;
-
-console.log(resetUrl);
 
 try {
   await sendMail({

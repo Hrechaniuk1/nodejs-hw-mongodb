@@ -19,6 +19,7 @@ const contactSchema = new Schema ({
         match: [/\S+@\S+\.\S+/, 'Please enter a valid email'],
         required: false,
       },
+      photo: {type: String},
       isFavourite: {
         type: Boolean,
         default: false,

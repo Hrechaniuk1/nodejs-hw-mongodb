@@ -10,6 +10,7 @@ export const contactSchema = Joi.object({
     email: Joi.string().email().messages({
         'string.email' : 'Should be a valid email address',
     }),
+    photo: Joi.string(),
     isFavourite: Joi.boolean(),
     contactType: Joi.string().min(3).max(20),
 });
@@ -20,6 +21,7 @@ export const contactSchemaPutch = Joi.object({
     email: Joi.string().email().message({
         'string.email' : 'Should be a valid email address',
     }),
+    photo: Joi.string(),
     isFavourite: Joi.boolean(),
     contactType: Joi.string().min(3).max(20),
     userId: Joi.string(),

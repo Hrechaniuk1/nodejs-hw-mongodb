@@ -4,6 +4,9 @@ import { getAllContacts, getContactById, addContact, deleteContact, putchContact
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parsedSortParapms } from '../utils/parseSortParams.js';
 import { parseFilters } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import {saveFileToCloudinary} from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
 
 export async function getAllContactsController(req, res) {
         const {page, perPage} = parsePaginationParams(req.query);
@@ -32,7 +35,16 @@ export async function getContactByIdController(req, res) {
   }
 
 export async function addContactController(req, res) {
-    const contact = await addContact(req.body, req.user._id);
+    const photo = req.file;
+    let photoUrl;
+    if(photo) {
+      if(env('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    };
+    const contact = await addContact({...req.body, ...(photoUrl ? {photo: photoUrl} : {})}, req.user._id);
     res.status(201).json({
         status: 201,
         message: 'Successfully created a contact!',
@@ -51,7 +63,16 @@ export async function deleteContactController(req, res) {
 
 export async function putchContactController(req, res) {
     const {contactId} = req.params;
-    const updatedContact = await putchContact(contactId, req.body, req.user._id);
+    const photo = req.file;
+    let photoUrl;
+    if(photo) {
+      if(env('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    };
+    const updatedContact = await putchContact(contactId, {...req.body, ...(photoUrl?{photo: photoUrl}: {})}, req.user._id);
     if(!updatedContact) {
         throw createHttpError(404, "Contact not found");
     }
