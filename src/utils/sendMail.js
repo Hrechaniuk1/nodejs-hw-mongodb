@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import { env } from './env.js';
 
 const transporter = nodemailer.createTransport({
+    secure: false,
     host: env('SMTP_HOST'),
     port: env('SMTP_PORT'),
     auth: {

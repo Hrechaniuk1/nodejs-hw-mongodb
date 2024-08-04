@@ -2,12 +2,16 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
+import path from 'path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 
 import { usersCollection } from "../db/models/user.js";
 import {FIFTEEN_MINUTES, THIRTY_DAYS}  from '../constants/authConstants.js';
 import {sessionCollection} from '../db/models/session.js';
 import {sendMail} from '../utils/sendMail.js';
 import { env } from '../utils/env.js';
+import { TEMPLETE_HTML } from '../constants/htmlTemplete.js';
 
 async function createSession(userId) {
     const accessToken = randomBytes(30).toString('base64');
@@ -83,12 +87,26 @@ export const resetPassword = async (email) => {
 const resetUrl = `https://${env('APP_DOMAIN')}/reset-password?token=
 ${resetToken}`;
 
+const resetPasswordTemplatePath = path.join(TEMPLETE_HTML, 'reset-password-email.html');
+const templateSourse = ( await fs.readFile(resetPasswordTemplatePath)).toString();
+
+const iCanNotFindTheRightWay = `Брево змінює посилання і я не можу це виправити, тому я просто передам його так, а Ви можливо порадите, що зробити ${resetUrl}`;
+
+
+const templete = handlebars.compile(templateSourse);
+const html = templete({
+  name: user.name,
+  message: iCanNotFindTheRightWay,
+  link: resetUrl,
+});
+
+
 try {
   await sendMail({
     from: env('SMTP_FROM'),
     to: email,
     subject: 'Reset your password',
-    html: `<p>Click <a href="${resetUrl}">here</a> to reset your password!</p>`,
+    html,
   });
 } catch {
   throw createHttpError("Failed to send the email, please try again later.");
