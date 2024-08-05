@@ -90,13 +90,10 @@ ${resetToken}`;
 const resetPasswordTemplatePath = path.join(TEMPLETE_HTML, 'reset-password-email.html');
 const templateSourse = ( await fs.readFile(resetPasswordTemplatePath)).toString();
 
-const iCanNotFindTheRightWay = `Брево змінює посилання і я не можу це виправити, тому я просто передам його так, а Ви можливо порадите, що зробити ${resetUrl}`;
-
 
 const templete = handlebars.compile(templateSourse);
 const html = templete({
   name: user.name,
-  message: iCanNotFindTheRightWay,
   link: resetUrl,
 });
 
