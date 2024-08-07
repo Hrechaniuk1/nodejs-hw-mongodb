@@ -84,8 +84,7 @@ export const resetPassword = async (email) => {
   },
 );
 
-const resetUrl = `https://${env('APP_DOMAIN')}/reset-password?token=
-${resetToken}`;
+const resetUrl = `http://${env('APP_DOMAIN')}/reset-password?token=${resetToken}`;
 
 const resetPasswordTemplatePath = path.join(TEMPLETE_HTML, 'reset-password-email.html');
 const templateSourse = ( await fs.readFile(resetPasswordTemplatePath)).toString();
@@ -97,7 +96,7 @@ const html = templete({
   link: resetUrl,
 });
 
-
+console.log(html);
 try {
   await sendMail({
     from: env('SMTP_FROM'),
