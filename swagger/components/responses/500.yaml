@@ -14,7 +14,7 @@ content:
           example: 500
         message:
           type: string
-          example: Contact not found
+          example: Something went wrong! Try again!
         data:
           type: object
 
