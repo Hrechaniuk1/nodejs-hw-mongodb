@@ -8,7 +8,10 @@ info:
   description:
     <опис вашого додатку>
 tags:
-  # теги, що ви будете використовувати
+  - name: auth
+    description: Endpoints related to user authentication
+  - name: contacts
+    description: Endpoints related to managing contacts
 servers:
   - url: http://localhost:14000
   - url: #посилання на задеплоєний сайт
