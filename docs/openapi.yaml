@@ -14,7 +14,7 @@ tags:
     description: Endpoints related to managing contacts
 servers:
   - url: http://localhost:14000
-  - url: #посилання на задеплоєний сайт
+  - url: https://nodejs-hw-mongodb-lc59.onrender.com
 paths:
   /auth/login:
     post:

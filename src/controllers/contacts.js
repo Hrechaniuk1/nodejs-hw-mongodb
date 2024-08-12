@@ -40,7 +40,7 @@ export async function addContactController(req, res) {
     if(photo) {
       if(env('ENABLE_CLOUDINARY') === 'true') {
         photoUrl = await saveFileToCloudinary(photo);
-      } else {
+      } else { 
         photoUrl = await saveFileToUploadDir(photo);
       }
     };

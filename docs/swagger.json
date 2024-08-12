@@ -14,10 +14,19 @@
       "url": "http://localhost:14000"
     },
     {
-      "url": null
+      "url": "https://nodejs-hw-mongodb-lc59.onrender.com"
     }
   ],
-  "tags": null,
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Endpoints related to user authentication"
+    },
+    {
+      "name": "contacts",
+      "description": "Endpoints related to managing contacts"
+    }
+  ],
   "paths": {
     "/auth/login": {
       "post": {
@@ -399,7 +408,7 @@
     "/contacts": {
       "get": {
         "tags": [
-          "Contacts"
+          "contacts"
         ],
         "summary": "Get list of contacts",
         "operationId": "getContacts",
@@ -760,7 +769,7 @@
       },
       "get": {
         "tags": [
-          "Contacts"
+          "contacts"
         ],
         "summary": "Get contact by id",
         "operationId": "getContact",
@@ -818,7 +827,7 @@
       },
       "delete": {
         "tags": [
-          "Contacts"
+          "contacts"
         ],
         "summary": "Delete contact by id",
         "operationId": "deleteContact",

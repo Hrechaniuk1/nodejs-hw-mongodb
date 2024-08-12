@@ -1,6 +1,6 @@
 
 tags:
-  - Contacts
+  - contacts
 summary: Get list of contacts
 operationId: getContacts
 description: 'Get list of contacts of user'

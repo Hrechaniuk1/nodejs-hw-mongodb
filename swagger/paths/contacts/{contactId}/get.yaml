@@ -1,6 +1,6 @@
 
 tags:
-  - Contacts
+  - contacts
 summary: Get contact by id
 operationId: getContact
 description: 'Get contact by id'
